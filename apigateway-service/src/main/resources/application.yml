@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    active: dev   # dev profile? ??
+  application:
+    name: apigateway-service
+  config:
+    import: configserver:http://localhost:8888
+  cloud:
+    config:
+      profile: dev  # dev profile ?? ?? ??
+      label: main
