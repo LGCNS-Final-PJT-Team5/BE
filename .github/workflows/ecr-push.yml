@@ -3,8 +3,8 @@ name: Build and Push to ECR
 on:
   push:
     branches:
-      # - main  # main 브랜치에 push 될 때 워크플로우 실행
-      - 2-cicd-setting # test용
+      - main  # main 브랜치에 push 될 때 워크플로우 실행
+      # - 2-cicd-setting # test용
 
 env:
   AWS_REGION: ap-northeast-2
