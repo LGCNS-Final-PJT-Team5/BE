@@ -1,0 +1,27 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: config-server
+  profiles:
+    active:
+      - git
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/LGCNS-Final-PJT-Team5/Resources.git
+          search-paths:
+            - service-discovery
+            - apigateway-service
+          default-label: main
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true

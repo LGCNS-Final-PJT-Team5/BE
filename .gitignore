@@ -1,0 +1,33 @@
+# === 빌드 & 캐시 ===
+.gradle/
+build/
+out/
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+
+# === IDE ===
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+
+# === 환경 설정 ===
+.env
+.env.*
+**/application-*.yml
+**/application-*.properties
+
+# === 테스트 & 커버리지 ===
+/test-output/
+/test-results/
+/coverage/
+/jacoco.exec
+
+# === 보안 ===
+*.key
+*.pem
+*.jks
+*.p12
+*.crt
