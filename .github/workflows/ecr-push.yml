@@ -8,12 +8,10 @@ on:
 
 env:
   AWS_REGION: ap-northeast-2
-  IMAGE_TAG: latest
-  SERVICES: |
-    apigateway-service
-    config-service
-    service-discovery
-  ECR_REPO_URI: 211125408736.dkr.ecr.ap-northeast-2.amazonaws.com/modive/be-services
+  IMAGE_TAG: ${{ github.sha }}
+  APIGATEWAY_REGISTRY_URI: 211125408736.dkr.ecr.ap-northeast-2.amazonaws.com/modive/apigateway-service
+  CONFIG_REGISTRY_URI: 211125408736.dkr.ecr.ap-northeast-2.amazonaws.com/modive/config-service
+  DISCOVERY_REGISTRY_URI: 211125408736.dkr.ecr.ap-northeast-2.amazonaws.com/modive/service-discovery
 
 jobs:
   build-and-push:
@@ -42,15 +40,17 @@ jobs:
       # 각 서비스별로 Docker 이미지 빌드 및 ECR에 푸시
       - name: Build and push Docker images for all services
         run: |
-          for SERVICE in $SERVICES; do
-            echo "Building image for $SERVICE"
+          echo "Building image for apigateway-service"
+          docker build -t apigateway-service:${{ env.IMAGE_TAG }} ./apigateway-service
+          docker tag apigateway-service:${{ env.IMAGE_TAG }} ${{ env.APIGATEWAY_REGISTRY_URI }}:${{ env.IMAGE_TAG }}
+          docker push ${{ env.APIGATEWAY_REGISTRY_URI }}:${{ env.IMAGE_TAG }}
 
-            # 도커 이미지 빌드
-            docker build -t $SERVICE:${{ env.IMAGE_TAG }} ./$SERVICE
+          echo "Building image for config-service"
+          docker build -t config-service:${{ env.IMAGE_TAG }} ./config-service
+          docker tag config-service:${{ env.IMAGE_TAG }} ${{ env.CONFIG_REGISTRY_URI }}:${{ env.IMAGE_TAG }}
+          docker push ${{ env.CONFIG_REGISTRY_URI }}:${{ env.IMAGE_TAG }}
 
-            # 태깅
-            docker tag $SERVICE:${{ env.IMAGE_TAG }} ${{ env.ECR_REPO_URI }}/$SERVICE:${{ env.IMAGE_TAG }}
-
-            # ECR 푸시
-            docker push ${{ env.ECR_REPO_URI }}/$SERVICE:${{ env.IMAGE_TAG }}
-          done
+          echo "Building image for service-discovery"
+          docker build -t service-discovery:${{ env.IMAGE_TAG }} ./service-discovery
+          docker tag service-discovery:${{ env.IMAGE_TAG }} ${{ env.DISCOVERY_REGISTRY_URI }}:${{ env.IMAGE_TAG }}
+          docker push ${{ env.DISCOVERY_REGISTRY_URI }}:${{ env.IMAGE_TAG }}
