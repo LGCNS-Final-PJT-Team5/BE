@@ -3,4 +3,54 @@ name: Build and Push to ECR
 on:
   push:
     branches:
-      - main  
+      # - main  # main 브랜치에 push 될 때 워크플로우 실행
+      - 2-cicd-setting # test용
+
+env:
+  AWS_REGION: ap-northeast-2
+  IMAGE_TAG: latest
+  SERVICES: |
+    apigateway-service
+    config-service
+    service-discovery
+  ECR_REPO_URI: 211125408736.dkr.ecr.ap-northeast-2.amazonaws.com/modive/be-services
+
+jobs:
+  build-and-push:
+    name: Build and Push Docker Images
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      # AWS 인증 구성
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # ECR 로그인
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # 각 서비스별로 Docker 이미지 빌드 및 ECR에 푸시
+      - name: Build and push Docker images for all services
+        run: |
+          for SERVICE in $SERVICES; do
+            echo "Building image for $SERVICE"
+
+            # 도커 이미지 빌드
+            docker build -t $SERVICE:${{ env.IMAGE_TAG }} ./$SERVICE
+
+            # 태깅
+            docker tag $SERVICE:${{ env.IMAGE_TAG }} ${{ env.ECR_REPO_URI }}/$SERVICE:${{ env.IMAGE_TAG }}
+
+            # ECR 푸시
+            docker push ${{ env.ECR_REPO_URI }}/$SERVICE:${{ env.IMAGE_TAG }}
+          done
