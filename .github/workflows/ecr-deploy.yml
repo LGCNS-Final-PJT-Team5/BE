@@ -1,0 +1,37 @@
+name: Deploy to EC2
+
+on: 
+  workflow_run:
+    workflows: ["Build and Push to ECR"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    name: Deploy services to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Connect and deploy on EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Logging in to ECR"
+            aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 211125408736.dkr.ecr.ap-northeast-2.amazonaws.com
+
+            echo "Pulling images"
+            docker pull 211125408736.dkr.ecr.ap-northeast-2.amazonaws.com/modive/apigateway-service:${{ github.sha }}
+            docker pull 211125408736.dkr.ecr.ap-northeast-2.amazonaws.com/modive/config-service:${{ github.sha }}
+            docker pull 211125408736.dkr.ecr.ap-northeast-2.amazonaws.com/modive/service-discovery:${{ github.sha }}
+
+            echo "Stopping existing containers"
+            docker stop apigateway-service || true && docker rm apigateway-service || true
+            docker stop config-service || true && docker rm config-service || true 
+            docker stop service-discovery || true && docker rm service-discovery || true
+
+            echo "Running new containers"
+            docker run -d --name apigateway-service -p 8000:8000 211125408736.dkr.ecr.ap-northeast-2.amazonaws.com/modive/apigateway-service:${{ github.sha }}
+            docker run -d --name config-service -p 
