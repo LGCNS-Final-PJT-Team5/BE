@@ -3,8 +3,8 @@ name: Build, Push to ECR and Deploy
 on:
   push:
     branches:
-      # - main
-      - 2-cicd-setting  # 테스트용
+      - main
+      # - 2-cicd-setting  # 테스트용
 
 env:
   AWS_REGION: ap-northeast-2
@@ -14,18 +14,18 @@ env:
   DISCOVERY_REGISTRY_URI: 211125408736.dkr.ecr.ap-northeast-2.amazonaws.com/modive/service-discovery
 
 jobs:
-  build-push-deploy:
-    name: Build, Push Docker Images and Deploy
-    runs-on: ubuntu-latest  # GitHub 제공 Ubuntu 최신 러너 사용
+  build-push:
+    name: Build and Push Docker Images
+    runs-on: ubuntu-latest
 
     permissions:
       id-token: write
-      contents: read  # AWS 인증(OIDC) 및 레포지토리 코드 읽기 허용
+      contents: read
 
     steps:
       # 소스코드 체크아웃
       - name: Checkout source code
-        uses: actions/checkout@v4  # 레포지토리 소스코드 체크아웃
+        uses: actions/checkout@v4
 
       # AWS 자격 증명 구성
       - name: Configure AWS credentials
@@ -36,7 +36,7 @@ jobs:
 
       # ECR 로그인
       - name: Login to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v2  # ECR 로그인 처리
+        uses: aws-actions/amazon-ecr-login@v2
 
       # 모든 서비스 도커 이미지 빌드 및 ECR 푸시
       - name: Build and push Docker images for all services
@@ -55,6 +55,27 @@ jobs:
           docker build -t service-discovery:${{ env.IMAGE_TAG }} ./service-discovery
           docker tag service-discovery:${{ env.IMAGE_TAG }} ${{ env.DISCOVERY_REGISTRY_URI }}:${{ env.IMAGE_TAG }}
           docker push ${{ env.DISCOVERY_REGISTRY_URI }}:${{ env.IMAGE_TAG }}
+
+  deploy:
+    name: Deploy with CodeDeploy
+    runs-on: ubuntu-latest
+    needs: build-push
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      # 소스코드 체크아웃
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      # AWS 자격 증명 구성
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
 
       # CodeDeploy 배포용 패키지 준비
       - name: Prepare deployment package
