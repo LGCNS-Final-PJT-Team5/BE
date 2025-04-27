@@ -3,12 +3,12 @@ name: Build and Push to ECR
 on:
   push:
     branches:
-      - main  # main 브랜치에 push 될 때 워크플로우 실행
-      # - 2-cicd-setting # test용
+      # - main  # main 브랜치에 push 될 때 워크플로우 실행
+      - 2-cicd-setting # test용
 
 env:
   AWS_REGION: ap-northeast-2
-  IMAGE_TAG: ${{ github.sha }}
+  IMAGE_TAG: latest
   APIGATEWAY_REGISTRY_URI: 211125408736.dkr.ecr.ap-northeast-2.amazonaws.com/modive/apigateway-service
   CONFIG_REGISTRY_URI: 211125408736.dkr.ecr.ap-northeast-2.amazonaws.com/modive/config-service
   DISCOVERY_REGISTRY_URI: 211125408736.dkr.ecr.ap-northeast-2.amazonaws.com/modive/service-discovery
