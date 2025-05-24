@@ -13,9 +13,14 @@ spring:
         git:
           uri: https://github.com/LGCNS-Final-PJT-Team5/Resources.git
           search-paths:
-            - service-discovery
+            - admin-service
+            - analysis-service
             - apigateway-service
             - auth-service
+            - dashboard-service
+            - llm-service
+            - reward-service
+            - service-discovery
             - user-service
           default-label: main
 
