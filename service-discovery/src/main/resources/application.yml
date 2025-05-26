@@ -1,11 +1,11 @@
 spring:
   profiles:
-    active: dev   # dev profile? ??
+    active: dev
   application:
     name: service-discovery
   config:
-    import: configserver:http://localhost:8888
+    import: configserver:${CONFIG_URI:http://localhost:8888}
   cloud:
     config:
-      profile: dev    # dev profile ?? ?? ??
+      profile: dev
       label: main
