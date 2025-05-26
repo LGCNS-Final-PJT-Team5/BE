@@ -7,7 +7,7 @@ image:
 
 service:
   type: ClusterIP   # 클러스터 내부에서만 접근 가능 (기본값)
-  port: 8000
+  port: 80
 
 # 헬스체크 설정 (권장)
 healthCheck:
