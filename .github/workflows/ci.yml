@@ -3,15 +3,14 @@ name: Build, Push to ECR and Deploy
 on:
   push:
     branches:
-      - main
-      # - 2-cicd-setting  # 테스트용
+#      - main
+       - 2-cicd-setting  # 테스트용
 
 env:
   AWS_REGION: ap-northeast-2
-  IMAGE_TAG: latest
-  APIGATEWAY_REGISTRY_URI: 211125408736.dkr.ecr.ap-northeast-2.amazonaws.com/modive/apigateway-service
-  CONFIG_REGISTRY_URI: 211125408736.dkr.ecr.ap-northeast-2.amazonaws.com/modive/config-service
-  DISCOVERY_REGISTRY_URI: 211125408736.dkr.ecr.ap-northeast-2.amazonaws.com/modive/service-discovery
+  APIGATEWAY_REGISTRY_URI: 026274465258.dkr.ecr.ap-northeast-2.amazonaws.com/api-gateway-service
+  CONFIG_REGISTRY_URI: 026274465258.dkr.ecr.ap-northeast-2.amazonaws.com/config-service
+  DISCOVERY_REGISTRY_URI: 026274465258.dkr.ecr.ap-northeast-2.amazonaws.com/eureka-service
 
 jobs:
   build-push:
@@ -20,7 +19,7 @@ jobs:
 
     permissions:
       id-token: write
-      contents: read
+      contents: write
 
     steps:
       # 소스코드 체크아웃
@@ -37,6 +36,11 @@ jobs:
       # ECR 로그인
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
+        
+      # 이미지 태그 달기 
+      - name: Set IMAGE_TAG
+        run: |
+          echo "IMAGE_TAG=$(date +'%Y%m%d')-${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       # 모든 서비스 도커 이미지 빌드 및 ECR 푸시
       - name: Build and push Docker images for all services
@@ -55,6 +59,22 @@ jobs:
           docker build -t service-discovery:${{ env.IMAGE_TAG }} ./service-discovery
           docker tag service-discovery:${{ env.IMAGE_TAG }} ${{ env.DISCOVERY_REGISTRY_URI }}:${{ env.IMAGE_TAG }}
           docker push ${{ env.DISCOVERY_REGISTRY_URI }}:${{ env.IMAGE_TAG }}
+          
+      - name: Update image tag in Helm values.yaml
+        run: |
+          sed -i "s/^[[:space:]]*tag:[[:space:]].*/  tag: ${{ env.IMAGE_TAG }}/" ./apigateway-service/charts/values.yaml
+           sed -i "s/^[[:space:]]*tag:[[:space:]].*/  tag: ${{ env.IMAGE_TAG }}/" ./config-service/charts/values.yaml
+           sed -i "s/^[[:space:]]*tag:[[:space:]].*/  tag: ${{ env.IMAGE_TAG }}/" ./service-discovery/charts/values.yaml
+
+          git config --global user.email "ci@github.com"
+          git config --global user.name "GitHub Actions"
+          
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          
+          
+          git add ./charts/values.yaml
+          git commit -m "chore: update image tag to ${{ env.IMAGE_TAG }}"
+          git push origin HEAD:${{ github.ref }}
 
   deploy:
     name: Deploy with CodeDeploy
