@@ -12,7 +12,7 @@ data:
 
     spring:
       jwt:
-        issuer: {{ .Values.config.jwt.issuer | default "http://localhost" }}
+{{/*        issuer: {{ .Values.config.jwt.issuer | default "http://localhost" }}*/}}
         secret: ${JWT_SECRET}
       application:
         name: {{ .Chart.Name | default "apigateway-service" }}

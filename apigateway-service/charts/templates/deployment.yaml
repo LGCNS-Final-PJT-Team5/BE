@@ -34,6 +34,8 @@ spec:
           env:
             - name: SPRING_CONFIG_LOCATION
               value: "classpath:/application.yml,file:/app/config/application.yml"
+            - name: SPRING_JWT_ISSUER
+              value: {{ .Values.config.jwt.issuer | default "http://localhost" }}
 
           # secret 불러오기
           envFrom:
