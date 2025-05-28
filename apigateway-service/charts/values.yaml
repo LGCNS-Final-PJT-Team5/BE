@@ -16,7 +16,3 @@ healthCheck:
   port: 8000
   initialDelaySeconds: 30
   periodSeconds: 10
-
-config:
-  jwt:
-    issuer: http://localhost
