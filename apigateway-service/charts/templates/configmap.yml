@@ -11,7 +11,7 @@ data:
       port: {{ .Values.service.port | default 8000}}
     spring:
       application:
-        name: {{ .Values.config.app.name | default "apigateway-service" }}
+        name: {{ .Chart.Name | default "apigateway-service" }}
         gateway:
           routes:
             - id: auth-service
