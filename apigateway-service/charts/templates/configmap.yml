@@ -8,10 +8,15 @@ metadata:
 data:
   application.yml: |
     server:
-      port: {{ .Values.service.port | default 8000}}
+      port: {{ .Values.service.port | default 8000 }}
+
     spring:
+      jwt:
+        issuer: {{ .Values.config.jwt.issuer | default "http://localhost" }}
+        secret: ${JWT_SECRET}
       application:
         name: {{ .Chart.Name | default "apigateway-service" }}
+      cloud:
         gateway:
           routes:
             - id: auth-service
@@ -28,7 +33,6 @@ data:
                 - Method=GET,POST,PATCH,DELETE
               filters:
                 - RemoveRequestHeader=Cookie
-                # - AuthorizationHeaderFilter
             - id: dashboard-service
               uri: lb://DASHBOARD-SERVICE
               predicates:
@@ -36,7 +40,6 @@ data:
                 - Method=GET,POST,PATCH,DELETE
               filters:
                 - RemoveRequestHeader=Cookie
-                # - AuthorizationHeaderFilter
             - id: llm-service
               uri: lb://LLM-SERVICE
               predicates:
@@ -44,7 +47,6 @@ data:
                 - Method=GET,POST,PATCH,DELETE
               filters:
                 - RemoveRequestHeader=Cookie
-                # - AuthorizationHeaderFilter
             - id: reward-service
               uri: lb://REWARD-SERVICE
               predicates:
@@ -52,7 +54,6 @@ data:
                 - Method=GET,POST,PATCH,DELETE
               filters:
                 - RemoveRequestHeader=Cookie
-                # - AuthorizationHeaderFilter
             - id: admin-service
               uri: lb://ADMIN-SERVICE
               predicates:
@@ -60,7 +61,6 @@ data:
                 - Method=GET,POST,PATCH,DELETE
               filters:
                 - RemoveRequestHeader=Cookie
-                # - AuthorizationHeaderFilter
             - id: analysis-service
               uri: lb://ANALYSIS-SERVICE
               predicates:
@@ -68,11 +68,6 @@ data:
                 - Method=GET,POST,PATCH,DELETE
               filters:
                 - RemoveRequestHeader=Cookie
-                # - AuthorizationHeaderFilter
-
-      jwt:
-        issuer: {{ .Values.config.jwt.issuer | default "http://localhost" }}
-        secret: ${JWT_SECRET}
 
     management:
       endpoints:
