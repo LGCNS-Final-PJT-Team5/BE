@@ -11,7 +11,7 @@ data:
       port: {{ .Values.config.server.port | default 8000 }}
     spring:
       jwt:
-        issuer: http://localhost
+        issuer: {{ .Values.config.spring.jwt.issuer | default "http://localhost" }}
         secret: ${JWT_SECRET}
       application:
         name: {{ .Chart.Name | default "apigateway-service" }}

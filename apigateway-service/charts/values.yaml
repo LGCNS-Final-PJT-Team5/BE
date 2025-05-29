@@ -20,3 +20,6 @@ healthCheck:
 config:
   server:
     port: 8000
+  spring:
+    jwt:
+      issuer: http://localhost
