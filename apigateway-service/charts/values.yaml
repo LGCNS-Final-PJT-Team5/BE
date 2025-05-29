@@ -7,7 +7,7 @@ image:
 
 service:
   type: ClusterIP   # 클러스터 내부에서만 접근 가능 (기본값)
-  port: 8000        # 80에서 8000으로 수정 (테스트 중...) 
+  port: 80        
 
 # 헬스체크 설정 (권장)
 healthCheck:
@@ -16,3 +16,7 @@ healthCheck:
   port: 8000
   initialDelaySeconds: 30
   periodSeconds: 10
+
+config:
+  server:
+    port: 8000

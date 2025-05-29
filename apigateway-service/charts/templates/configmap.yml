@@ -8,7 +8,7 @@ metadata:
 data:
   application.yml: |
     server:
-      port: {{ .Values.service.port | default 8000 }}
+      port: {{ .Values.config.server.port | default 8000 }}
     spring:
       jwt:
         issuer: http://localhost
