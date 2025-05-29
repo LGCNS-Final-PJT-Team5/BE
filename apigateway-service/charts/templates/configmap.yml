@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: {{ .Chart.Name }}-config
   labels:
-    app: admin-service
+    app: {{ .Chart.Name }}
     version: {{ .Chart.AppVersion | default "1.0" }}
 data:
   application.yml: |
