@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: 026274465258.dkr.ecr.ap-northeast-2.amazonaws.com/api-gateway-service
-  tag: 20250529-f1390b3
+  tag: 20250529-d66aa24
   pullPolicy: IfNotPresent    # 이미지 가져오는 정책 로컬에 없을 때만 pull
 
 service:
