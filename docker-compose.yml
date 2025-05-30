@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  config-service:
+    build: ./config-service
+    container_name: config-service
+    ports:
+      - "8888:8888"
+    networks:
+      - msa-net
+
+  service-discovery:
+    build: ./service-discovery
+    container_name: service-discovery
+    depends_on:
+      - config-service
+    ports:
+      - "8761:8761"
+    networks:
+      - msa-net
+
+  apigateway-service:
+    build: ./apigateway-service
+    container_name: apigateway-service
+    depends_on:
+      - config-service
+      - service-discovery
+    ports:
+      - "8080:8080"
+    networks:
+      - msa-net
+
+networks:
+  msa-net:
+    driver: bridge
