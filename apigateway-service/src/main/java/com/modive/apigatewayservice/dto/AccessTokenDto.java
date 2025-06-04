@@ -2,9 +2,11 @@ package com.modive.apigatewayservice.dto;
 
 import com.modive.apigatewayservice.entity.MemberRole;
 
-public record AccessTokenDto(Long memberId, MemberRole role, String accessTokenValue) {
-    public static AccessTokenDto of(Long memberId, MemberRole role, String accessTokenValue) {
-        return new AccessTokenDto(memberId, role, accessTokenValue);
+import java.util.UUID;
+
+public record AccessTokenDto(UUID userId, MemberRole role, String accessTokenValue) {
+    public static AccessTokenDto of(UUID userId, MemberRole role, String accessTokenValue) {
+        return new AccessTokenDto(userId, role, accessTokenValue);
     }
 }
 

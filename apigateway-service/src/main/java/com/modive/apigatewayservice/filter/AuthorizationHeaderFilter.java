@@ -55,9 +55,11 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             }
 
             ServerHttpRequest mutatedRequest = request.mutate()
-                    .header("X-USER-ID", String.valueOf(accessTokenDto.memberId()))
+                    .header("X-USER-ID", String.valueOf(accessTokenDto.userId()))
                     .header("X-USER-ROLE", accessTokenDto.role().name())
                     .build();
+
+            System.out.println("Setting X-USER-ID header: " + String.valueOf(accessTokenDto.userId())); // 추가
 
             return chain.filter(exchange.mutate().request(mutatedRequest).build());
         };
