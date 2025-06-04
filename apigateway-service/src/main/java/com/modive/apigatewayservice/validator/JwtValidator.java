@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class JwtValidator {
 
-    @Value("${SPRING_JWT_ISSUER}")
+    @Value("${spring.jwt.issuer}")
     private String issuer;
 
     @Value("${spring.jwt.secret}")
