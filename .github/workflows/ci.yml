@@ -3,8 +3,7 @@ name: Build, Push to ECR and Deploy
 on:
   push:
     branches:
-#      - main
-       - 2-cicd-setting  # 테스트용
+     - main
 
 env:
   AWS_REGION: ap-northeast-2
