@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-config
+  labels:
+    app: {{ .Chart.Name }}
+    version: {{ .Chart.AppVersion | default "1.0" }}
+data:
+  application.yml: |
+    server:
+      port: {{ .Values.config.server.port | default 8000 }}
+    spring:
+      jwt:
+        issuer: {{ .Values.config.spring.jwt.issuer | default "http://localhost" }}
+        secret: ${JWT_SECRET}
+      application:
+        name: {{ .Chart.Name | default "apigateway-service" }}
+      cloud:
+        gateway:
+          routes:
+            - id: auth-service
+              uri: lb://AUTH-SERVICE
+              predicates:
+                - Path=/auth/**
+                - Method=GET,POST,PATCH,DELETE
+              filters:
+                - RemoveRequestHeader=Cookie
+            - id: user-service
+              uri: lb://USER-SERVICE
+              predicates:
+                - Path=/user/**
+                - Method=GET,POST,PATCH,DELETE
+              filters:
+                - RemoveRequestHeader=Cookie
+            - id: dashboard-service
+              uri: lb://DASHBOARD-SERVICE
+              predicates:
+                - Path=/dashboard/**
+                - Method=GET,POST,PATCH,DELETE
+              filters:
+                - RemoveRequestHeader=Cookie
+            - id: llm-service
+              uri: lb://LLM-SERVICE
+              predicates:
+                - Path=/llm/**
+                - Method=GET,POST,PATCH,DELETE
+              filters:
+                - RemoveRequestHeader=Cookie
+            - id: reward-service
+              uri: lb://REWARD-SERVICE
+              predicates:
+                - Path=/reward/**
+                - Method=GET,POST,PATCH,DELETE
+              filters:
+                - RemoveRequestHeader=Cookie
+            - id: admin-service
+              uri: lb://ADMIN-SERVICE
+              predicates:
+                - Path=/admin/**
+                - Method=GET,POST,PATCH,DELETE
+              filters:
+                - RemoveRequestHeader=Cookie
+            - id: analysis-service
+              uri: lb://ANALYSIS-SERVICE
+              predicates:
+                - Path=/analysis/**
+                - Method=GET,POST,PATCH,DELETE
+              filters:
+                - RemoveRequestHeader=Cookie
+
+    management:
+      endpoints:
+        web:
+          exposure:
+            include: "*"
+      endpoint:
+        gateway:
+          enabled: true
