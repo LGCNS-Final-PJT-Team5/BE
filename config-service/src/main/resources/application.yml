@@ -11,7 +11,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/LGCNS-Final-PJT-Team5/Resources.git
+          uri: https://github.com/LGCNS-Final-PJT-Team5/Resources
           search-paths:
             - admin-service
             - analysis-service
