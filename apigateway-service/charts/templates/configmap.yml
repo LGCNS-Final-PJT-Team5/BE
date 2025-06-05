@@ -73,7 +73,14 @@ data:
               filters:
                 - RemoveRequestHeader=Cookie
                 - AuthorizationHeaderFilter
-
+            - id: agent-service
+              uri: http://agent-service.agent-service.svc.cluster.local:80
+              predicates:
+                - Path=/agent/**
+                - Method=GET,POST,PATCH,DELETE
+              filters:
+                - RemoveRequestHeader=Cookie
+                - AuthorizationHeaderFilter
     management:
       endpoints:
         web:
