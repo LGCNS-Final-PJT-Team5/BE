@@ -18,6 +18,7 @@ data:
       cloud:
         gateway:
           routes:
+            # auth-service 라우팅
             - id: auth-service
               uri: http://auth-service.auth-service.svc.cluster.local:80
               predicates:
@@ -25,6 +26,7 @@ data:
                 - Method=GET,POST,PATCH,DELETE
               filters:
                 - RemoveRequestHeader=Cookie
+            # user-service 라우팅
             - id: user-service
               uri: http://user-service.user-service.svc.cluster.local:80
               predicates:
@@ -33,6 +35,7 @@ data:
               filters:
                 - RemoveRequestHeader=Cookie
                 - AuthorizationHeaderFilter
+            # dashboard-service 라우팅
             - id: dashboard-service
               uri: http://dashboard-service.dashboard-service.svc.cluster.local:80
               predicates:
@@ -41,6 +44,7 @@ data:
               filters:
                 - RemoveRequestHeader=Cookie
                 - AuthorizationHeaderFilter
+            # llm-service 라우팅
             - id: llm-service
               uri: http://llm-service.llm-service.svc.cluster.local:80
               predicates:
@@ -49,6 +53,7 @@ data:
               filters:
                 - RemoveRequestHeader=Cookie
                 - AuthorizationHeaderFilter
+            # reward-service 라우팅
             - id: reward-service
               uri: http://reward-service.reward-service.svc.cluster.local:80
               predicates:
@@ -57,6 +62,7 @@ data:
               filters:
                 - RemoveRequestHeader=Cookie
                 - AuthorizationHeaderFilter
+            # admin-service 라우팅
             - id: admin-service
               uri: http://admin-service.admin-service.svc.cluster.local:80
               predicates:
@@ -65,6 +71,7 @@ data:
               filters:
                 - RemoveRequestHeader=Cookie
                 - AuthorizationHeaderFilter
+            # analysis-service 라우팅
             - id: analysis-service
               uri: http://analysis-service.analysis-service.svc.cluster.local:80
               predicates:
@@ -73,6 +80,7 @@ data:
               filters:
                 - RemoveRequestHeader=Cookie
                 - AuthorizationHeaderFilter
+            # agent-service 라우팅
             - id: agent-service
               uri: http://agent-service.agent-service.svc.cluster.local:80
               predicates:
