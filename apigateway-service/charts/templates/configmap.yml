@@ -19,49 +19,49 @@ data:
         gateway:
           routes:
             - id: auth-service
-              uri: lb://AUTH-SERVICE
+              uri: http://auth-service.auth-service.svc.cluster.local:80
               predicates:
                 - Path=/auth/**
                 - Method=GET,POST,PATCH,DELETE
               filters:
                 - RemoveRequestHeader=Cookie
             - id: user-service
-              uri: lb://USER-SERVICE
+              uri: http://user-service.user-service.svc.cluster.local:80
               predicates:
                 - Path=/user/**
                 - Method=GET,POST,PATCH,DELETE
               filters:
                 - RemoveRequestHeader=Cookie
             - id: dashboard-service
-              uri: lb://DASHBOARD-SERVICE
+              uri: http://dashboard-service.dashboard-service.svc.cluster.local:80
               predicates:
                 - Path=/dashboard/**
                 - Method=GET,POST,PATCH,DELETE
               filters:
                 - RemoveRequestHeader=Cookie
             - id: llm-service
-              uri: lb://LLM-SERVICE
+              uri: http://llm-service.llm-service.svc.cluster.local:80
               predicates:
                 - Path=/llm/**
                 - Method=GET,POST,PATCH,DELETE
               filters:
                 - RemoveRequestHeader=Cookie
             - id: reward-service
-              uri: lb://REWARD-SERVICE
+              uri: http://reward-service.reward-service.svc.cluster.local:80
               predicates:
                 - Path=/reward/**
                 - Method=GET,POST,PATCH,DELETE
               filters:
                 - RemoveRequestHeader=Cookie
             - id: admin-service
-              uri: lb://ADMIN-SERVICE
+              uri: http://admin-service.admin-service.svc.cluster.local:80
               predicates:
                 - Path=/admin/**
                 - Method=GET,POST,PATCH,DELETE
               filters:
                 - RemoveRequestHeader=Cookie
             - id: analysis-service
-              uri: lb://ANALYSIS-SERVICE
+              uri: http://analysis-service.analysis-service.svc.cluster.local:80
               predicates:
                 - Path=/analysis/**
                 - Method=GET,POST,PATCH,DELETE
