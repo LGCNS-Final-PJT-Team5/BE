@@ -32,6 +32,7 @@ data:
                 - Method=GET,POST,PATCH,DELETE
               filters:
                 - RemoveRequestHeader=Cookie
+                - AuthorizationHeaderFilter
             - id: dashboard-service
               uri: http://dashboard-service.dashboard-service.svc.cluster.local:80
               predicates:
@@ -39,6 +40,7 @@ data:
                 - Method=GET,POST,PATCH,DELETE
               filters:
                 - RemoveRequestHeader=Cookie
+                - AuthorizationHeaderFilter
             - id: llm-service
               uri: http://llm-service.llm-service.svc.cluster.local:80
               predicates:
@@ -46,6 +48,7 @@ data:
                 - Method=GET,POST,PATCH,DELETE
               filters:
                 - RemoveRequestHeader=Cookie
+                - AuthorizationHeaderFilter
             - id: reward-service
               uri: http://reward-service.reward-service.svc.cluster.local:80
               predicates:
@@ -53,6 +56,7 @@ data:
                 - Method=GET,POST,PATCH,DELETE
               filters:
                 - RemoveRequestHeader=Cookie
+                - AuthorizationHeaderFilter
             - id: admin-service
               uri: http://admin-service.admin-service.svc.cluster.local:80
               predicates:
@@ -60,6 +64,7 @@ data:
                 - Method=GET,POST,PATCH,DELETE
               filters:
                 - RemoveRequestHeader=Cookie
+                - AuthorizationHeaderFilter
             - id: analysis-service
               uri: http://analysis-service.analysis-service.svc.cluster.local:80
               predicates:
@@ -67,6 +72,7 @@ data:
                 - Method=GET,POST,PATCH,DELETE
               filters:
                 - RemoveRequestHeader=Cookie
+                - AuthorizationHeaderFilter
 
     management:
       endpoints:
