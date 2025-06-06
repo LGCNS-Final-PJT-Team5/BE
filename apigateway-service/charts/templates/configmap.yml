@@ -20,7 +20,7 @@ data:
           routes:
             # auth-service 라우팅
             - id: auth-service
-              uri: http://auth-service.auth-service.svc.cluster.local:80
+              uri: {{ .Values.config.spring.cloud.gateway.routes.uri.auth | default "http://auth-service.auth-service.svc.cluster.local:80" }}
               predicates:
                 - Path=/auth/**
                 - Method=GET,POST,PATCH,DELETE
@@ -28,16 +28,24 @@ data:
                 - RemoveRequestHeader=Cookie
             # user-service 라우팅
             - id: user-service
-              uri: http://user-service.user-service.svc.cluster.local:80
+              uri: {{ .Values.config.spring.cloud.gateway.routes.uri.user | default "http://user-service.user-service.svc.cluster.local:80" }}
               predicates:
                 - Path=/user/**
                 - Method=GET,POST,PATCH,DELETE
               filters:
                 - RemoveRequestHeader=Cookie
                 - AuthorizationHeaderFilter
-            # dashboard-service 라우팅
+            # dashboard-service 라우팅 - public 경로 (인증 없음)
+            - id: dashboard-service-public
+              uri: {{ .Values.config.spring.cloud.gateway.routes.uri.dashboard | default "http://dashboard-service.dashboard-service.svc.cluster.local:80" }}
+              predicates:
+                - Path=/dashboard/post-drive
+                - Method=POST
+              filters:
+                - RemoveRequestHeader=Cookie
+            # dashboard-service 라우팅 - 나머지 경로 (인증 필터 적용)
             - id: dashboard-service
-              uri: http://dashboard-service.dashboard-service.svc.cluster.local:80
+              uri: {{ .Values.config.spring.cloud.gateway.routes.uri.dashboard | default "http://dashboard-service.dashboard-service.svc.cluster.local:80" }}
               predicates:
                 - Path=/dashboard/**
                 - Method=GET,POST,PATCH,DELETE
@@ -46,7 +54,7 @@ data:
                 - AuthorizationHeaderFilter
             # llm-service 라우팅
             - id: llm-service
-              uri: http://llm-service.llm-service.svc.cluster.local:80
+              uri: {{ .Values.config.spring.cloud.gateway.routes.uri.llm | default "http://llm-service.llm-service.svc.cluster.local:80" }}
               predicates:
                 - Path=/llm/**
                 - Method=GET,POST,PATCH,DELETE
@@ -55,7 +63,7 @@ data:
                 - AuthorizationHeaderFilter
             # reward-service 라우팅
             - id: reward-service
-              uri: http://reward-service.reward-service.svc.cluster.local:80
+              uri: {{ .Values.config.spring.cloud.gateway.routes.uri.reward | default "http://reward-service.reward-service.svc.cluster.local:80" }}
               predicates:
                 - Path=/reward/**
                 - Method=GET,POST,PATCH,DELETE
@@ -64,7 +72,7 @@ data:
                 - AuthorizationHeaderFilter
             # admin-service 라우팅
             - id: admin-service
-              uri: http://admin-service.admin-service.svc.cluster.local:80
+              uri: {{ .Values.config.spring.cloud.gateway.routes.uri.admin | default "http://admin-service.admin-service.svc.cluster.local:80" }}
               predicates:
                 - Path=/admin/**
                 - Method=GET,POST,PATCH,DELETE
@@ -73,7 +81,7 @@ data:
                 - AuthorizationHeaderFilter
             # analysis-service 라우팅
             - id: analysis-service
-              uri: http://analysis-service.analysis-service.svc.cluster.local:80
+              uri: {{ .Values.config.spring.cloud.gateway.routes.uri.analysis | default "http://analysis-service.analysis-service.svc.cluster.local:80" }}
               predicates:
                 - Path=/analysis/**
                 - Method=GET,POST,PATCH,DELETE
@@ -82,7 +90,7 @@ data:
                 - AuthorizationHeaderFilter
             # agent-service 라우팅
             - id: agent-service
-              uri: http://agent-service.agent-service.svc.cluster.local:80
+              uri: {{ .Values.config.spring.cloud.gateway.routes.uri.agent | default "http://agent-service.agent-service.svc.cluster.local:80" }}
               predicates:
                 - Path=/agent/**
                 - Method=GET,POST,PATCH,DELETE

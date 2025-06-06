@@ -23,3 +23,15 @@ config:
   spring:
     jwt:
       issuer: http://localhost
+    cloud:
+      gateway:
+        routes:
+          uri:
+            auth: http://auth-service.auth-service.svc.cluster.local:80
+            user: http://user-service.user-service.svc.cluster.local:80
+            dashboard: http://dashboard-service.dashboard-service.svc.cluster.local:80
+            llm: http://llm-service.llm-service.svc.cluster.local:80
+            reward: http://reward-service.reward-service.svc.cluster.local:80
+            admin: http://admin-service.admin-service.svc.cluster.local:80
+            analysis: http://analysis-service.analysis-service.svc.cluster.local:80
+            agent: http://agent-service.agent-service.svc.cluster.local:80
