@@ -97,3 +97,11 @@ data:
       endpoint:
         gateway:
           enabled: true
+        health:
+          show-details: always
+        prometheus:
+          enabled: true
+      metrics:
+        export:
+          prometheus:
+            enabled: true
